@@ -10,19 +10,17 @@ function Login(props) {
 
   // handle button click of login form
   const handleLogin = () => {
-    const token = Buffer.from(`${email.value}:${password.value}`, 'utf8').toString('base64')
     console.log(email.value);
     console.log(password.value);
     setError(null);
     setLoading(true);
-    axios.post('http://127.0.0.1:8080/auth/login', { email: email.value, password: password.value,
-      headers: {
-        'Authorization': `Basic ${token}`
-      }}).then(response => {
+    axios.post('http://127.0.0.1:8080/auth/login', { email: email.value, password: password.value}).then(response => {
+      console.log(response); 
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.history.push('/dashboard');
     }).catch(error => {
+      console.log(error);
       setLoading(false);
       if (error.response.status === 401) setError(error.response.data.message);
       else setError("Something went wrong. Please try again later.");

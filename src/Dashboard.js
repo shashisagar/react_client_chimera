@@ -3,7 +3,6 @@ import { getUser, removeUserSession } from './Utils/Common';
 
 function Dashboard(props) {
   const user = getUser();
-
   // handle click event of logout button
   const handleLogout = () => {
     removeUserSession();
@@ -12,7 +11,7 @@ function Dashboard(props) {
 
   return (
     <div>
-      Welcome {user.name}!<br /><br />
+      Welcome {user.firstName}!<br /><br />
       <input type="button" onClick={handleLogout} value="Logout" />
     </div>
   );
