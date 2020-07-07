@@ -3,7 +3,7 @@ import { Navbar, Nav} from 'react-bootstrap';
 import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
-
+import Dashboard from './Dashboard';
 
 class NavBar extends React.Component {
     render(){
@@ -28,6 +28,7 @@ class NavBar extends React.Component {
                     <Switch>
                         <Route path="/login" component={Login} />
                         <Route path="/register" component={Register} />
+                        <Route path="/dashboard" component={Dashboard} />
                     </Switch>
                 </div>
             </div>
