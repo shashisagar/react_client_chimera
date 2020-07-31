@@ -3,6 +3,7 @@ import {Form,Button} from 'react-bootstrap';
 import axios from 'axios';
 import { setUserSession } from '../Utils/Common';
 
+
 class Login extends React.Component {
   constructor(props){
     super(props);
@@ -12,22 +13,21 @@ class Login extends React.Component {
     };
   }
   handleChange = event => {
-      const { name, value } = event.target  //Destructure the current fields name and value
-      this.setState({ [name]: value });  //Sets state
+      const { name, value } = event.target
+      this.setState({ [name]: value });
   };
   handleSubmit = event => {
       event.preventDefault();
-      //Alter your Axios request like below
       const userObject = {
         email: this.state.email,
         password: this.state.password,
       }
-      axios.post('http://127.0.0.1:8080/auth/login', userObject)
+      axios.post('http://localhost:8080/api/auth', userObject)
       .then((response) => {
         setUserSession(response.data.token, response.data.user);
         this.props.history.push('/dashboard');
       }).catch((error) => {
-          console.log(error)
+          return false;
       });
   }  
   render() {

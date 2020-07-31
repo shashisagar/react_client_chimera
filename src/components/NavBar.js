@@ -4,6 +4,9 @@ import { BrowserRouter, Switch, Route} from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
+import Chat from './Chat';
+import ChatWindows from './ChatWindows';
+
 
 class NavBar extends React.Component {
     render(){
@@ -18,7 +21,7 @@ class NavBar extends React.Component {
                     <Nav.Link href="/login">Login</Nav.Link> 
                     <Nav.Link href="/register">Register</Nav.Link>
                     <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                    <Nav.Link href="/chat">Chat</Nav.Link>
+                    <Nav.Link href="/chat-windows">Chat</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
@@ -29,6 +32,7 @@ class NavBar extends React.Component {
                         <Route path="/login" component={Login} />
                         <Route path="/register" component={Register} />
                         <Route path="/dashboard" component={Dashboard} />
+                        <Route path="/chat-windows" component={ChatWindows} />
                     </Switch>
                 </div>
             </div>

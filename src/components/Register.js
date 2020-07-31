@@ -26,7 +26,7 @@ class Register extends React.Component {
         phone: this.state.phone,
         password: this.state.password,
       }
-      axios.post('http://127.0.0.1:8080/user', userObject)
+      axios.post('http://127.0.0.1:8080/api/users', userObject)
       .then((response) => {
           setUserSession(response.data.token, response.data.user);
           console.log(response.data)
