@@ -2,7 +2,8 @@ import React from 'react';
 import {Form,Button} from 'react-bootstrap';
 import axios from 'axios';
 import { setUserSession } from '../Utils/Common';
-
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 class Login extends React.Component {
   constructor(props){
@@ -12,6 +13,14 @@ class Login extends React.Component {
       password: '',
     };
   }
+  componentDidMount() {
+    this.initSocketConnection();
+  }
+
+  initSocketConnection() {
+      this.socket = socketIOClient.connect(ENDPOINT);
+  }
+
   handleChange = event => {
       const { name, value } = event.target
       this.setState({ [name]: value });
@@ -25,7 +34,7 @@ class Login extends React.Component {
       axios.post('http://localhost:8080/api/auth', userObject)
       .then((response) => {
         setUserSession(response.data.token, response.data.user);
-        this.props.history.push('/dashboard');
+        this.props.history.push('/chat-windows');
       }).catch((error) => {
           return false;
       });

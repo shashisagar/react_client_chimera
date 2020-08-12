@@ -36,14 +36,17 @@ class ChatBox extends React.Component {
    *
    * listen for enter pressed and sends the message.
    */
+
+  onMessageKeyUp(e) {
+    this.props.onMessageKeyPress(e.target.value);
+  } 
+
   onMessageKeyPress(e) {
     if (e.key === "Enter") {
-      alert("enter");
       this.onSendClicked();
     }
   }
   render() {
-    //console.log(this.props.greeting);
     return (
         <div>
            <NavbarComponent
@@ -53,12 +56,6 @@ class ChatBox extends React.Component {
                     <p className="navBarText">
                     </p>
                   </Col>
-                  <Avatar
-                    src='https://facebook.github.io/react/img/logo.svg'
-                    alt={"logo"}
-                    size="large"
-                    type="circle flexible"
-                  />
                   <p className="navBarText">{this.props.userinfo}</p>
                 </div>
               }
@@ -75,6 +72,7 @@ class ChatBox extends React.Component {
                value={this.state.messageText}
                onChange={this.onMessageInputChange.bind(this)}
                onKeyPress={this.onMessageKeyPress.bind(this)} 
+               onKeyUp={this.onMessageKeyUp.bind(this)}
                placeholder="Type a message here (Limit 3000 characters)..."/>
               <Button variant="primary" onClick={this.onSendClicked.bind(this)}>
                 Send

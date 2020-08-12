@@ -6,69 +6,71 @@ import 'react-chat-elements/dist/main.css';
 import { ChatList } from 'react-chat-elements'
 import { getToken } from  '../Utils/Common';
 import { getUser, removeUserSession } from '../Utils/Common';
-import  { Redirect } from 'react-router-dom'
-
-
+import  { Redirect } from 'react-router-dom';
+import {Container,Row,Col} from "react-bootstrap";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 class Chat extends React.Component {
   constructor(props)
   {
     super(props);
     this.state = {
-      listItems : []
+      listItems : [],
+      seachText : '',
     };
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount(){
-    const user = getUser();
-    const obj = JSON.parse(user);
-    const user_id = obj._id;
-    const config = {
-      method: 'get',
-      url: 'http://127.0.0.1:8080/api/users/getUser/'+user_id,
-      headers: { 'x-auth-token': sessionStorage.getItem('token') }
-    }
-    axios(config)
-    .then(res => {
-        let data = res.data;
-        const listItems = data.map((d) => <li key={d.firstName}>{d.firstName}</li>);
-        this.setState({listItems : data})
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+  handleClick(val) {
+    this.props.onChatClicked(val);
   }
+
+  _handleSearchChange = e => {
+    let listItems = this.state.listItems;
+    let c2 = this.props.userList;
+    let { value } = e.target;
+    let lowercasedValue = value.toLowerCase();
+    let c3 = c2.filter(e =>
+      e.firstName.toLowerCase().includes(lowercasedValue)
+    );
+    this.setState({seachText: value})
+    this.setState({
+      listItems : c3
+    })
+  };
+
   render() {
+    let userlist = '';
     const user = getUser();
     if(!user) {
       return <Redirect to='/login'  />
     }
+
+    let searchTerm = this.state.seachText;
+    if(searchTerm !='') {
+      userlist = this.state.listItems;
+    } else {
+      userlist = this.props.userList;
+    }
     return <div>
            <FormGroup>
             <FormControl
-              type="text"
+              type="text" onChange={this._handleSearchChange}
               placeholder="Search for a user here..."
             />
           </FormGroup> 
-          <ChatList
-            className="chat-list"
-            dataSource={this.state.listItems.map((f, i) => {
-              let date = null;
-              let subtitle = "";
-              return {
-                avatar: 'https://facebook.github.io/react/img/logo.svg',
-                alt: f.firstName,
-                title: f.firstName,
-                subtitle: f.firstName,
-                date: date,
-                unread: f.unread,
-                user: f.firstName,
-                id : f._id
-              };
-            })            
-          }
-          onClick={this.props.onChatClicked}
-          />
+
+          <div>
+              {userlist.map((f,i) => (
+                <Row key={i} onClick={() => this.handleClick(f)}>
+                  <Col>{f.firstName} </Col>
+                  <Col>{f.status}</Col>
+                  <Col>{f.count}</Col>
+                  <Col>{f.typing}</Col>
+                </Row>
+              ))}
+          </div>
     </div>;
   }
 }
