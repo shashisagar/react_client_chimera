@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {FormControl} from "react-bootstrap";
+import {FormControl, Image} from "react-bootstrap";
 import {InputGroup} from "react-bootstrap";
 import {Button} from "react-bootstrap";
 import {FormGroup,Col} from "react-bootstrap";
@@ -52,10 +52,7 @@ class ChatBox extends React.Component {
            <NavbarComponent
               left={
                 <div>
-                  <Col mdHidden lgHidden>
-                    <p className="navBarText">
-                    </p>
-                  </Col>
+                  <Image  style={{ width: 20 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle />
                   <p className="navBarText">{this.props.userinfo}</p>
                 </div>
               }

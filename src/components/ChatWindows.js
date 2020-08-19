@@ -11,7 +11,7 @@ const ENDPOINT = "http://localhost:8080";
 class ChatWindows extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' };
+        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : []};
     }
     componentDidMount() {
         this.initSocketConnection();
@@ -33,23 +33,55 @@ class ChatWindows extends React.Component {
     }
 
     addTyping(e){
-        //console.log(e);
-        const userlist = this.state.userList;
-        for (var i = 0; i < userlist.length; i++) {
-            if(e.text !='') {
-                if(userlist[i]['_id'] == e.id) {
-                    userlist[i]['typing'] = 'typing...';
-                } else {
-                    userlist[i]['typing'] = '';
-                } 
-            } else {
-                userlist[i]['typing'] = '';
-            }
-        } 
-        this.setState({userList : userlist})  
+        console.log("1111");
+
+        // //console.log(e);
+        // const userlist = this.state.userList;
+        // for (var i = 0; i < userlist.length; i++) {
+        //     if(e.text !='') {
+        //         if(userlist[i]['_id'] == e.id) {
+        //             userlist[i]['typing'] = 'typing...';
+        //         } else {
+        //             userlist[i]['typing'] = '';
+        //         } 
+        //     } else {
+        //         userlist[i]['typing'] = '';
+        //     }
+        // } 
+        // this.setState({userList : userlist})  
     }
 
-    onMessage(message) {
+    // For online/offline , get online user on login and assign into user array
+    onMessage(userids) {
+        let userid = this.state.userids;
+        userid = userids;
+        this.setState({userids : userid})  
+        this.getUserData(userids);
+    }
+
+    onMessageRecieved(message) {
+        //console.log("2222");
+        const userlist = this.state.userList;
+        const user = getUser();
+        var obj = JSON.parse(user);
+        if((this.state.to == message.to && obj._id == message.from) || (this.state.to == message.from && obj._id == message.to)) {
+            if(obj._id == message.from) {
+                message.message.position = 'right';  
+            } else {
+                message.message.position = 'left';  
+            }
+            let messageData = this.state.messageData;
+            //console.log(message);
+            messageData = message.message;
+            this.setState(prevState => ({
+                messageData : [...prevState.messageData, messageData]
+            }))
+        }  
+        console.log(this.state.userids); 
+        this.getUserData(this.state.userids);    
+    }
+
+    getUserData(userids) {
         const user = getUser();
         const obj = JSON.parse(user);
         const user_id = obj._id;
@@ -62,73 +94,45 @@ class ChatWindows extends React.Component {
           .then(res => {
               let data = res.data;
               let keyArray  = [];
-              Object.keys(message).forEach(function(key) {
-                  keyArray.push(message[key]);
+              Object.keys(userids).forEach(function(key) {
+                  keyArray.push(userids[key]);
               });
               let userlist = data;
               for (var i = 0; i < userlist.length; i++) {
-                  if(keyArray.includes(userlist[i]['_id'])){
-                      userlist[i]['status'] = 'online';
-                  } else {
-                      userlist[i]['status'] = 'offline';
-                  }
-                  const length = (userlist[i]['message']).length;
-                  userlist[i]['count'] = length;
-              } 
+                    if(keyArray.includes(userlist[i]['_id'])){
+                        userlist[i]['status'] = 'online';
+                    } else {
+                        userlist[i]['status'] = 'offline';
+                    }
+                    const len = userlist[i]['message'].length;
+                    if(len > 0) {
+                        userlist[i]['time_calculate'] = userlist[i]['message'][len-1]['created_date'];
+                    } else {
+                        userlist[i]['time_calculate'] = '';
+                    }
+
+                    var unread_count = 0;
+                    for(var j=0; j< len; j++) {
+                        if(userlist[i]['message'][j]['toId'] == user_id && userlist[i]['message'][j]['is_read'] == 0) {
+                            unread_count++;
+                        }
+                    }
+                    userlist[i]['unread_count'] = unread_count;
+                } 
               this.setState({userList : userlist})  
-          })
-          .catch((error) => {
-              console.log(error)
-          })
+              userlist.sort((a, b) => (a.time_calculate < b.time_calculate) ? 1 : -1)
+              this.setState({userList : userlist});
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
-    onMessageRecieved(message) {
+    createMessage(text) {    
         const user = getUser();
         var obj = JSON.parse(user);
-        if(obj._id == message.from) {
-            message.message.position = 'right';  
-        } else {
-            message.message.position = 'left';  
-        }
-        let messageData = this.state.messageData;
-        messageData = message.message;
-        this.setState(prevState => ({
-            messageData : [...prevState.messageData, messageData]
-        }))
-
-        const user_id = obj._id;
-        const config = {
-            method: 'get',
-            url: 'http://127.0.0.1:8080/api/users/getUser/'+user_id,
-            headers: { 'x-auth-token': sessionStorage.getItem('token') }
-          }
-          axios(config)
-          .then(res => {
-              let data = res.data;
-              let keyArray  = [];
-              Object.keys(message).forEach(function(key) {
-                  keyArray.push(message[key]);
-              });
-              let userlist = data;
-              for (var i = 0; i < userlist.length; i++) {
-                  if(keyArray.includes(userlist[i]['_id'])){
-                      userlist[i]['status'] = 'online';
-                  } else {
-                      userlist[i]['status'] = 'offline';
-                  }
-                  const length = (userlist[i]['message']).length;
-                  userlist[i]['count'] = length;
-              } 
-              this.setState({userList : userlist})  
-          })
-          .catch((error) => {
-              console.log(error)
-          })
-    }
-
-    createMessage(text) {     
-        const user = getUser();
-        var obj = JSON.parse(user);
+        const status = this.state.status;
+        let is_read = '';
         let message = {
             message: {
               position: 'right',
@@ -146,15 +150,14 @@ class ChatWindows extends React.Component {
 
     onChatClicked(e) {
         let to = this.state.to;
-        let title = this.state.title;
+        let status = this.state.status;
         to = e._id;
-        title = e.title;
-        this.setState({to,title});
+        status = e.status;
+        this.setState({to,status});
         const user = getUser();
         var obj = JSON.parse(user);
         const user_id = obj._id;
         const userinfo = e.firstName;
-        console.log(userinfo);
         const config = {
             method: 'get',
             url: 'http://127.0.0.1:8080/api/users/getMessages/'+to+'/'+user_id,
@@ -190,7 +193,9 @@ class ChatWindows extends React.Component {
 
         const userlist = this.state.userList;
         for (var i = 0; i < this.state.userList.length; i++) {
-            userlist[i]['count'] = 0;
+            if(to == userlist[i]['_id']){
+                userlist[i]['unread_count'] = '';
+            }
         } 
         this.setState({userList : userlist, userinfo : userinfo})  
     }

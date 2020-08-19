@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import {FormControl,FormGroup} from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import {FormControl,FormGroup, Image, Card, Button} from "react-bootstrap";
 import { MessageBox } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css';
 import { ChatList } from 'react-chat-elements'
@@ -64,10 +66,27 @@ class Chat extends React.Component {
           <div>
               {userlist.map((f,i) => (
                 <Row key={i} onClick={() => this.handleClick(f)}>
-                  <Col>{f.firstName} </Col>
-                  <Col>{f.status}</Col>
-                  <Col>{f.count}</Col>
-                  <Col>{f.typing}</Col>
+                   {/* <Col md={2}>
+                    </Col>
+                  <Col md={2}>{f.firstName} </Col>
+                  <Col>{f.status}</Col> */}
+                  {/* <Col>{f.typing}</Col> */}
+                  <Card style={{ width: '18rem' }}>
+                      <Card.Body>
+                        <Card.Text>
+                          <Row>
+
+        { f.status == 'online'
+        ? <Image style={{ width: 10 +"%"}} src="./icons8-green-circle-48.png" />
+        : <Image style={{ width: 10 +"%"}} src="./icons8-circle-30.png"/> }
+                  
+                          <Col md={2}><Image  style={{ width: 70 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
+                          <Col md={5}>{f.firstName} </Col>
+                          <Col md={3}>{f.unread_count} </Col>
+                          </Row>
+                        </Card.Text>
+                      </Card.Body>
+                  </Card>
                 </Row>
               ))}
           </div>
