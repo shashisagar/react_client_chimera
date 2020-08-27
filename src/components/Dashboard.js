@@ -1,27 +1,29 @@
 import React from 'react';
 import { getUser, removeUserSession } from '../Utils/Common';
 
-function Dashboard(props) {
-  const user = getUser();
-  const obj = JSON.parse(user);
-  console.log(user);
-  if(!user) {
-    props.history.push('/login');
-    return null;
-  }
-  else {
+class Dashboard extends React.Component {
   // handle click event of logout button
-  const handleLogout = () => {
+  handleLogout = () => {
     removeUserSession();
-    props.history.push('/login');
+    this.props.history.push('/login');
+    setTimeout(function(){ window.location.reload(false) }, 500);
   }
-  return (
-    <div>
-      Welcome {obj.firstName}!<br /><br />
-      <input type="button" onClick={handleLogout} value="Logout" />
-    </div>
-  );
+  render(){
+    console.log(this.props.onEnter);
+    const user = getUser();
+    const obj = JSON.parse(user);
+
+    if(obj == null) {
+       this.props.history.push('/login');
+       return false;
+    } else {
+        return (
+          <div>
+            Welcome {obj.firstName}!<br /><br />
+            <input type="button" onClick={this.handleLogout} value="Logout" />
+          </div>
+        );
+    }
   }
 }
-
 export default Dashboard;

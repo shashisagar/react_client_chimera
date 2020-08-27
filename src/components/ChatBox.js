@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import {FormControl, Image} from "react-bootstrap";
 import {InputGroup} from "react-bootstrap";
 import {Button} from "react-bootstrap";
-import {FormGroup,Col} from "react-bootstrap";
+import {FormGroup} from "react-bootstrap";
 
 import {
   MessageList,
   Navbar as NavbarComponent,
-  Avatar
 } from "react-chat-elements";
 
 class ChatBox extends React.Component {
@@ -53,31 +52,34 @@ class ChatBox extends React.Component {
               left={
                 <div>
                   <Image  style={{ width: 20 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle />
-                  <p className="navBarText">{this.props.userinfo}</p>
+                  {this.props.userinfo}
                 </div>
               }
             /> 
-        <div>
-        <MessageList
-          className='message-list'
-          lockable={true}
-          toBottomHeight={'100%'}
-          dataSource={this.props.greeting} />          
-          <FormGroup>
-            <InputGroup>
-              <FormControl type="text"
-               value={this.state.messageText}
-               onChange={this.onMessageInputChange.bind(this)}
-               onKeyPress={this.onMessageKeyPress.bind(this)} 
-               onKeyUp={this.onMessageKeyUp.bind(this)}
-               placeholder="Type a message here (Limit 3000 characters)..."/>
-              <Button variant="primary" onClick={this.onSendClicked.bind(this)}>
-                Send
-              </Button>
-            </InputGroup>
-          </FormGroup>
+            <div>
+                <MessageList
+                  className='message-list'
+                  lockable={true}
+                  toBottomHeight={'100%'}
+                  dataSource={this.props.greeting}
+                />          
+            </div>
+            <div style={{position: 'fixed', bottom: '0' , width: '60%' }}>
+                <FormGroup>
+                    <InputGroup>
+                      <FormControl type="text"
+                      value={this.state.messageText}
+                      onChange={this.onMessageInputChange.bind(this)}
+                      onKeyPress={this.onMessageKeyPress.bind(this)} 
+                      onKeyUp={this.onMessageKeyUp.bind(this)}
+                      placeholder="Type a message here (Limit 3000 characters)..."/>
+                      <Button variant="primary" onClick={this.onSendClicked.bind(this)}>
+                        Send
+                      </Button>
+                    </InputGroup>
+                </FormGroup>
+            </div>
         </div>
-      </div>
     );
   }
 }

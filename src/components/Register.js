@@ -1,8 +1,8 @@
 import React from 'react';
 import {Form,Button} from 'react-bootstrap';
 import axios from 'axios';
-import { setUserSession } from '../Utils/Common';
-
+import {setUserSession } from '../Utils/Common';
+import {browserHistory} from 'react-router';
 
 class Register extends React.Component {
   state = {
@@ -11,10 +11,13 @@ class Register extends React.Component {
     email: '',
     phone: '',
     password: '',
+    invalid_auth : '',
+    register_message : ''
   };
+
   handleChange = event => {
-      const { name, value } = event.target  //Destructure the current fields name and value
-      this.setState({ [name]: value });  //Sets state
+      const { name, value } = event.target; 
+      this.setState({ [name]: value });
   };
   handleSubmit = event => {
       event.preventDefault();
@@ -29,14 +32,23 @@ class Register extends React.Component {
       axios.post('http://127.0.0.1:8080/api/users', userObject)
       .then((response) => {
           setUserSession(response.data.token, response.data.user);
-          console.log(response.data)
-      }).catch((error) => {
-          console.log(error)
+          this.setState({register_message : 'User registered successfully!!,please login '});
+          this.setState({invalid_auth: ''});
+          browserHistory.push('/login');
+        }).catch((error) => {
+        let invalid_auth  = this.state.invalid_auth;
+        invalid_auth = error.response.data; 
+        this.setState({register_message: ''});
+        this.setState({invalid_auth});
+        return false;
       });
   }   
   render() {
     return (
       <div>
+          <span className='error' style={{color: "red"}}>{this.state.register_message !=='' && this.state.register_message}</span>
+          <span className='error' style={{color: "red"}}>{this.state.invalid_auth !=='' && this.state.invalid_auth}</span>
+
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="formBasicFirstName">
               <Form.Label>First Name</Form.Label>

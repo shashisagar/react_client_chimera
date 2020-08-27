@@ -2,9 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import Chat from './Chat';
 import ChatBox from './ChatBox';
+import EmptyChatWindows from './EmptyChatWindows';
 import {Container,Row,Col} from "react-bootstrap";
 import socketIOClient from "socket.io-client";
-import { getUser, removeUserSession } from '../Utils/Common';
+import { getUser } from '../Utils/Common';
 const ENDPOINT = "http://localhost:8080";
 
 
@@ -14,12 +15,16 @@ class ChatWindows extends React.Component {
         this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : []};
     }
     componentDidMount() {
-        this.initSocketConnection();
-        this.setupSocketListeners();
         const user = getUser();
         const obj = JSON.parse(user);
-        const user_id = obj._id;
-        this.socket.emit("adduser", obj);
+        if(obj == null){
+            this.props.history.push('/login');
+        } else {
+            this.initSocketConnection();
+            this.setupSocketListeners();
+            this.socket.emit("adduser", obj);
+        }
+      
     }
     
     initSocketConnection() {
@@ -60,12 +65,10 @@ class ChatWindows extends React.Component {
     }
 
     onMessageRecieved(message) {
-        //console.log("2222");
-        const userlist = this.state.userList;
         const user = getUser();
         var obj = JSON.parse(user);
-        if((this.state.to == message.to && obj._id == message.from) || (this.state.to == message.from && obj._id == message.to)) {
-            if(obj._id == message.from) {
+        if((this.state.to === message.to && obj._id === message.from) || (this.state.to === message.from && obj._id === message.to)) {
+            if(obj._id === message.from) {
                 message.message.position = 'right';  
             } else {
                 message.message.position = 'left';  
@@ -77,7 +80,6 @@ class ChatWindows extends React.Component {
                 messageData : [...prevState.messageData, messageData]
             }))
         }  
-        console.log(this.state.userids); 
         this.getUserData(this.state.userids);    
     }
 
@@ -113,7 +115,7 @@ class ChatWindows extends React.Component {
 
                     var unread_count = 0;
                     for(var j=0; j< len; j++) {
-                        if(userlist[i]['message'][j]['toId'] == user_id && userlist[i]['message'][j]['is_read'] == 0) {
+                        if(userlist[i]['message'][j]['toId'] === user_id && userlist[i]['message'][j]['is_read'] === 0) {
                             unread_count++;
                         }
                     }
@@ -131,8 +133,6 @@ class ChatWindows extends React.Component {
     createMessage(text) {    
         const user = getUser();
         var obj = JSON.parse(user);
-        const status = this.state.status;
-        let is_read = '';
         let message = {
             message: {
               position: 'right',
@@ -173,7 +173,7 @@ class ChatWindows extends React.Component {
                 chat['text'] = data[i]['message'];
                 chat['date'] = +new Date(data[i]['created_date']);
                 chat['className'] = "message";
-                if(user_id == data[i]['fromId']) {
+                if(user_id === data[i]['fromId']) {
                     chat['position'] = "right";
                 } else {
                     chat['position'] = "left";
@@ -193,7 +193,7 @@ class ChatWindows extends React.Component {
 
         const userlist = this.state.userList;
         for (var i = 0; i < this.state.userList.length; i++) {
-            if(to == userlist[i]['_id']){
+            if(to === userlist[i]['_id']){
                 userlist[i]['unread_count'] = '';
             }
         } 
@@ -208,21 +208,31 @@ class ChatWindows extends React.Component {
     }
 
     render() {
-        return (
-            <Container>
-                <Row>
-                    <Col md={4}> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList}
-                                   
-                    /> </Col>
-                    <Col md={8}>
-                        <ChatBox onSendClicked={this.createMessage.bind(this)}
-                                 greeting={this.state.messageData} userinfo={this.state.userinfo}
-                                 onMessageKeyPress={this.onkeyPressed.bind(this)}
-                                 /> 
-                    </Col>
-                </Row>
-            </Container>
-        ); 
+            return (
+                <Container>
+                    <Row>
+                        <Col md={4}> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList}
+                                       
+                        /> </Col>
+    
+                    {
+                        this.state.to
+                            ?   <Col md={8}>
+                                    <ChatBox onSendClicked={this.createMessage.bind(this)}
+                                        greeting={this.state.messageData} userinfo={this.state.userinfo}
+                                        onMessageKeyPress={this.onkeyPressed.bind(this)}
+                                        /> 
+                                </Col>
+                                : 
+                                <Col md={8} style = {{ border: "1px solid black", textAlign : 'center',fontSize: 'xxx-large'
+                            }}>
+                                    <EmptyChatWindows />
+                                </Col>
+                    }
+                    </Row>
+                </Container>
+            ); 
+       
     }
 }
 

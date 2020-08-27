@@ -1,17 +1,7 @@
 import React from 'react';
-import axios from 'axios';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import {FormControl,FormGroup, Image, Card, Button} from "react-bootstrap";
-import { MessageBox } from 'react-chat-elements';
+import {FormControl,FormGroup, Image, Card} from "react-bootstrap";
 import 'react-chat-elements/dist/main.css';
-import { ChatList } from 'react-chat-elements'
-import { getToken } from  '../Utils/Common';
-import { getUser, removeUserSession } from '../Utils/Common';
-import  { Redirect } from 'react-router-dom';
-import {Container,Row,Col} from "react-bootstrap";
-import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+import {Row,Col} from "react-bootstrap";
 
 class Chat extends React.Component {
   constructor(props)
@@ -29,7 +19,6 @@ class Chat extends React.Component {
   }
 
   _handleSearchChange = e => {
-    let listItems = this.state.listItems;
     let c2 = this.props.userList;
     let { value } = e.target;
     let lowercasedValue = value.toLowerCase();
@@ -44,17 +33,22 @@ class Chat extends React.Component {
 
   render() {
     let userlist = '';
-    const user = getUser();
-    if(!user) {
-      return <Redirect to='/login'  />
-    }
-
     let searchTerm = this.state.seachText;
-    if(searchTerm !='') {
+    if(searchTerm !=='') {
       userlist = this.state.listItems;
     } else {
       userlist = this.props.userList;
     }
+    var custom_css = {	
+        border: 'solid 1px black',
+        margin: '1px 0px 0px 0px ! important',
+        padding: 'inherit',
+        marginRight: '0px',
+        marginTop: '1px',
+        paddingTop: '16px',
+        paddingBottom: '11px',
+        backgroundColor: 'gainsboro'
+      }
     return <div>
            <FormGroup>
             <FormControl
@@ -65,28 +59,27 @@ class Chat extends React.Component {
 
           <div>
               {userlist.map((f,i) => (
-                <Row key={i} onClick={() => this.handleClick(f)}>
+                <Row style={custom_css} key={i} onClick={() => this.handleClick(f)}>
                    {/* <Col md={2}>
                     </Col>
                   <Col md={2}>{f.firstName} </Col>
                   <Col>{f.status}</Col> */}
                   {/* <Col>{f.typing}</Col> */}
-                  <Card style={{ width: '18rem' }}>
+                  {/* <Card style={{ width: '18rem' }}>
                       <Card.Body>
                         <Card.Text>
-                          <Row>
-
-        { f.status == 'online'
-        ? <Image style={{ width: 10 +"%"}} src="./icons8-green-circle-48.png" />
-        : <Image style={{ width: 10 +"%"}} src="./icons8-circle-30.png"/> }
-                  
-                          <Col md={2}><Image  style={{ width: 70 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
-                          <Col md={5}>{f.firstName} </Col>
-                          <Col md={3}>{f.unread_count} </Col>
-                          </Row>
+                          <Row> */}
+                              { f.status === 'online'
+                              ? <Image style={{ width: 5 +"%"}} src="./icons8-green-circle-48.png" />
+                              : <Image style={{ width: 5 +"%"}} src="./icons8-circle-30.png"/> }
+                      
+                              <Col md={2}><Image  style={{ width: 70 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
+                              <Col md={5}>{f.firstName} </Col>
+                              <Col md={3}>{f.unread_count === 0 ? '': f.unread_count} </Col>
+                          {/* </Row>
                         </Card.Text>
                       </Card.Body>
-                  </Card>
+                  </Card> */}
                 </Row>
               ))}
           </div>
