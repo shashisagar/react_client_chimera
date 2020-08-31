@@ -28,7 +28,7 @@ class LoginNavBar extends React.Component {
                     <Navbar.Collapse className="justify-content-end">
                                 <Navbar.Text>
                                 Signed in as: <a href="#login">{obj.firstName} {obj.lastName}</a>
-                                <input type="button" onClick={this.logoutHandler.bind(this)} value="Logout" />
+                                <input className="logoutButton" type="button" onClick={this.logoutHandler.bind(this)} value="Logout" />
                                 </Navbar.Text>
                     </Navbar.Collapse>
                 </Navbar>

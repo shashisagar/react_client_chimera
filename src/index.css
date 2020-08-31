@@ -36,3 +36,31 @@ code {
 .header .active {
   color: #2c7613;
 }
+.emoji-mart {
+    float: right;
+}
+.emoji-mart-bar {
+    display: none;
+}
+.logoutButton {
+  margin-left: 60px;
+}
+.onlineStyle {
+  width: 9%;
+  margin-top: -4px;
+  padding: 6px;
+}
+.userInfoClass{
+  padding: 7px;
+  background: #343a40;
+  color: white;
+}
+.emojiStyle {
+  width: 5%;
+  padding: 2px;
+  margin: 1px;
+  border: 1px solid #343a40;
+}
+.messageSend {
+  background:#343a40 !important ;
+}

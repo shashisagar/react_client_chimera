@@ -31,10 +31,10 @@ class Register extends React.Component {
       }
       axios.post('http://127.0.0.1:8080/api/users', userObject)
       .then((response) => {
-          setUserSession(response.data.token, response.data.user);
           this.setState({register_message : 'User registered successfully!!,please login '});
           this.setState({invalid_auth: ''});
           browserHistory.push('/login');
+          setTimeout(function(){ window.location.reload(false) }, 500);
         }).catch((error) => {
         let invalid_auth  = this.state.invalid_auth;
         invalid_auth = error.response.data; 

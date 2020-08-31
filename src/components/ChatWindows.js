@@ -12,7 +12,7 @@ const ENDPOINT = "http://localhost:8080";
 class ChatWindows extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : []};
+        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : [], active : ''};
     }
     componentDidMount() {
         const user = getUser();
@@ -151,13 +151,16 @@ class ChatWindows extends React.Component {
     onChatClicked(e) {
         let to = this.state.to;
         let status = this.state.status;
+        let active = this.state.active;
         to = e._id;
         status = e.status;
-        this.setState({to,status});
+        active = false;
+        this.setState({to,status,active});
+        console.log(this.state.active);
         const user = getUser();
         var obj = JSON.parse(user);
         const user_id = obj._id;
-        const userinfo = e.firstName;
+        const userinfo = e.firstName +" "+e.lastName;
         const config = {
             method: 'get',
             url: 'http://127.0.0.1:8080/api/users/getMessages/'+to+'/'+user_id,
@@ -211,8 +214,7 @@ class ChatWindows extends React.Component {
             return (
                 <Container>
                     <Row>
-                        <Col md={4}> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList}
-                                       
+                        <Col md={4}> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList} emojiState = {this.state.active} 
                         /> </Col>
     
                     {
@@ -221,6 +223,7 @@ class ChatWindows extends React.Component {
                                     <ChatBox onSendClicked={this.createMessage.bind(this)}
                                         greeting={this.state.messageData} userinfo={this.state.userinfo}
                                         onMessageKeyPress={this.onkeyPressed.bind(this)}
+                                        emojiStateCheck = {this.state.active} 
                                         /> 
                                 </Col>
                                 : 

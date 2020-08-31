@@ -15,6 +15,7 @@ class Chat extends React.Component {
   }
 
   handleClick(val) {
+    val.active =false;
     this.props.onChatClicked(val);
   }
 
@@ -23,7 +24,7 @@ class Chat extends React.Component {
     let { value } = e.target;
     let lowercasedValue = value.toLowerCase();
     let c3 = c2.filter(e =>
-      e.firstName.toLowerCase().includes(lowercasedValue)
+      (e.firstName + " "+e.lastName).toLowerCase().includes(lowercasedValue)
     );
     this.setState({seachText: value})
     this.setState({
@@ -47,8 +48,16 @@ class Chat extends React.Component {
         marginTop: '1px',
         paddingTop: '16px',
         paddingBottom: '11px',
-        backgroundColor: 'gainsboro'
+        cursor: 'pointer',
+        marginLeft : '1px'
       }
+    var count_css = {
+      borderRadius: '37px',
+      color: 'red',
+    } 
+    
+
+
     return <div>
            <FormGroup>
             <FormControl
@@ -56,30 +65,15 @@ class Chat extends React.Component {
               placeholder="Search for a user here..."
             />
           </FormGroup> 
-
           <div>
               {userlist.map((f,i) => (
                 <Row style={custom_css} key={i} onClick={() => this.handleClick(f)}>
-                   {/* <Col md={2}>
-                    </Col>
-                  <Col md={2}>{f.firstName} </Col>
-                  <Col>{f.status}</Col> */}
-                  {/* <Col>{f.typing}</Col> */}
-                  {/* <Card style={{ width: '18rem' }}>
-                      <Card.Body>
-                        <Card.Text>
-                          <Row> */}
-                              { f.status === 'online'
-                              ? <Image style={{ width: 5 +"%"}} src="./icons8-green-circle-48.png" />
-                              : <Image style={{ width: 5 +"%"}} src="./icons8-circle-30.png"/> }
-                      
-                              <Col md={2}><Image  style={{ width: 70 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
-                              <Col md={5}>{f.firstName} </Col>
-                              <Col md={3}>{f.unread_count === 0 ? '': f.unread_count} </Col>
-                          {/* </Row>
-                        </Card.Text>
-                      </Card.Body>
-                  </Card> */}
+                    { f.status === 'online'
+                    ? <Image className="onlineStyle" src="./icons8-green-circle-30.png" />
+                    : <Image className="onlineStyle" src="./icons8-circle-30.png"/> }
+                  <Col md={2}><Image  style={{ width: 100 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
+                  <Col md={5}>{f.firstName} {f.lastName} </Col>
+                  {f.unread_count === 0 ? <Col md={3}></Col>: <Col md={3} style={count_css}>{f.unread_count}</Col>}
                 </Row>
               ))}
           </div>

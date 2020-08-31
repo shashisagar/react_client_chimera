@@ -4,7 +4,6 @@ import LoginNavBar from './LoginNavBar';
 import { getUser, removeUserSession } from '../Utils/Common';
 import {browserHistory} from 'react-router';
 
-
 class NavBar extends React.Component {
     handleLogout() {
         removeUserSession();
@@ -14,6 +13,7 @@ class NavBar extends React.Component {
     render(){
         const user = getUser();
         const obj = JSON.parse(user);
+        console.log(obj);
         return (
             <div>
                 {obj == null ? <GuestNavBar /> : <LoginNavBar logoutHandler={this.handleLogout.bind(this)}/>
