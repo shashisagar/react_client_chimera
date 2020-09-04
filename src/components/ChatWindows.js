@@ -38,22 +38,26 @@ class ChatWindows extends React.Component {
     }
 
     addTyping(e){
-        console.log("1111");
-
-        // //console.log(e);
-        // const userlist = this.state.userList;
-        // for (var i = 0; i < userlist.length; i++) {
-        //     if(e.text !='') {
-        //         if(userlist[i]['_id'] == e.id) {
-        //             userlist[i]['typing'] = 'typing...';
-        //         } else {
-        //             userlist[i]['typing'] = '';
-        //         } 
-        //     } else {
-        //         userlist[i]['typing'] = '';
-        //     }
-        // } 
-        // this.setState({userList : userlist})  
+        const user = getUser();
+        var obj = JSON.parse(user);
+        const userlist = this.state.userList;
+        for (var i = 0; i < userlist.length; i++) {          
+            if(e.text !='') {
+                if(userlist[i]['_id'] === e.fromId) {
+                    if((obj._id === e.toId)) {
+                        userlist[i]['typing'] = 'typing...';
+                    }
+                } 
+            }
+            else {
+                if((obj._id === e.toId)) {
+                    if(userlist[i]['_id'] === e.fromId) {
+                        userlist[i]['typing'] = '';
+                    } 
+                }
+            }
+        } 
+        this.setState({userList : userlist})  
     }
 
     // For online/offline , get online user on login and assign into user array
@@ -84,6 +88,7 @@ class ChatWindows extends React.Component {
     }
 
     getUserData(userids) {
+        let users = this.state.userList;
         const user = getUser();
         const obj = JSON.parse(user);
         const user_id = obj._id;
@@ -99,6 +104,15 @@ class ChatWindows extends React.Component {
               Object.keys(userids).forEach(function(key) {
                   keyArray.push(userids[key]);
               });
+
+            //   let typingUsers  = [];
+            //   for (var i = 0; i < users.length; i++) {
+            //      if(users[i]['typing'] === 'typing...') {
+            //         typingUsers.push(users[i]['_id']);
+            //      } else {
+            //         typingUsers.push('');
+            //      }  
+            //   }
               let userlist = data;
               for (var i = 0; i < userlist.length; i++) {
                     if(keyArray.includes(userlist[i]['_id'])){
@@ -106,6 +120,11 @@ class ChatWindows extends React.Component {
                     } else {
                         userlist[i]['status'] = 'offline';
                     }
+                    // if(typingUsers.includes(userlist[i]['_id'])){
+                    //     userlist[i]['typing'] = 'typing...';
+                    // } else {
+                    //     userlist[i]['typing'] = '';
+                    // }
                     const len = userlist[i]['message'].length;
                     if(len > 0) {
                         userlist[i]['time_calculate'] = userlist[i]['message'][len-1]['created_date'];
@@ -206,7 +225,7 @@ class ChatWindows extends React.Component {
     onkeyPressed(e) {
         const user = getUser();
         var obj = JSON.parse(user);
-        const keyPressData = { 'id' : obj._id, 'text': e};
+        const keyPressData = { 'fromId' : obj._id, 'text': e , 'toId' : this.state.to};
         this.socket.emit("typing", keyPressData);
     }
 

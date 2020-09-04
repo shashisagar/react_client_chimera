@@ -74,6 +74,8 @@ class Chat extends React.Component {
                   <Col md={2}><Image  style={{ width: 100 +"%"}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle /></Col>
                   <Col md={5}>{f.firstName} {f.lastName} </Col>
                   {f.unread_count === 0 ? <Col md={3}></Col>: <Col md={3} style={count_css}>{f.unread_count}</Col>}
+                  <Col md={2} className="typingClass">{f.typing}</Col>
+
                 </Row>
               ))}
           </div>

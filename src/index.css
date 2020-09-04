@@ -64,3 +64,7 @@ code {
 .messageSend {
   background:#343a40 !important ;
 }
+.typingClass {
+  margin-left: 89px;
+  color: green;
+}
