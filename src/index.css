@@ -65,6 +65,20 @@ code {
   background:#343a40 !important ;
 }
 .typingClass {
-  margin-left: 89px;
+  margin-left: 52px;
   color: green;
+}
+.userlist {
+  overflow-y: scroll; 
+}
+.userInfoClass {
+  position: sticky;
+  top: -8px;
+}
+.message-list {
+  z-index: -1;
+}
+.searchText {
+  position: sticky;
+  top: -1px;
 }

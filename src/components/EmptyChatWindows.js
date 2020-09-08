@@ -1,13 +1,17 @@
 import React from 'react';
 import {Container,Row,Col} from "react-bootstrap";
+import { getUser, removeUserSession } from '../Utils/Common';
+
 
 class EmptyChatWindows extends React.Component {
     render() {
+        const user = getUser();
+        const obj = JSON.parse(user);
         return (
             <Container>
                 <Row>
                     <Col md={12}>
-                       Please start chat 
+                       Welcome! {obj.firstName}
                     </Col>
                 </Row>
             </Container>

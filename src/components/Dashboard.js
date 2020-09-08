@@ -9,7 +9,6 @@ class Dashboard extends React.Component {
     setTimeout(function(){ window.location.reload(false) }, 500);
   }
   render(){
-    console.log(this.props.onEnter);
     const user = getUser();
     const obj = JSON.parse(user);
 

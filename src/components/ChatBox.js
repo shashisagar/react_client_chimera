@@ -92,7 +92,7 @@ class ChatBox extends React.Component {
                   dataSource={this.props.greeting}
                 />          
             </div>
-            <div style={{position: 'relative', bottom: '0px', left: '0px', right: '0px', width: '100%' }}>
+            <div style={{marginTop:'430px', buttom:'0px'}} className="messageButton">
                 <FormGroup>
                     <InputGroup>
                       <FormControl type="text"
@@ -100,7 +100,7 @@ class ChatBox extends React.Component {
                       onChange={this.onMessageInputChange.bind(this)}
                       onKeyPress={this.onMessageKeyPress.bind(this)} 
                       onKeyUp={this.onMessageKeyUp.bind(this)}
-                      placeholder="Type a message here (Limit 3000 characters)..."/>
+                      placeholder="Type a message here ..."/>
                       <Image className="emojiStyle" src="./icons8-slightly-smiling-face-48.png" onClick={this.toggleClass.bind(this)}/>
                       <Button className="messageSend" onClick={this.onSendClicked.bind(this)}>
                         Send

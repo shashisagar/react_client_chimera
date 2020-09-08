@@ -9,10 +9,11 @@ import { getUser } from '../Utils/Common';
 const ENDPOINT = "http://localhost:8080";
 
 
+
 class ChatWindows extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : [], active : ''};
+        this.state = {date: new Date(), messageData: [], to : '', title : '', userList :[] , userinfo: '' , status: '', userids : [], active : '',messageToDone:''};
     }
     componentDidMount() {
         const user = getUser();
@@ -24,7 +25,6 @@ class ChatWindows extends React.Component {
             this.setupSocketListeners();
             this.socket.emit("adduser", obj);
         }
-      
     }
     
     initSocketConnection() {
@@ -83,8 +83,13 @@ class ChatWindows extends React.Component {
             this.setState(prevState => ({
                 messageData : [...prevState.messageData, messageData]
             }))
+          
         }  
-        this.getUserData(this.state.userids);    
+        let messageToDone = this.state.messageToDone;
+        messageToDone =  message.from;
+        this.setState({messageToDone})  
+        this.getUserData(this.state.userids);
+         
     }
 
     getUserData(userids) {
@@ -105,14 +110,13 @@ class ChatWindows extends React.Component {
                   keyArray.push(userids[key]);
               });
 
-            //   let typingUsers  = [];
-            //   for (var i = 0; i < users.length; i++) {
-            //      if(users[i]['typing'] === 'typing...') {
-            //         typingUsers.push(users[i]['_id']);
-            //      } else {
-            //         typingUsers.push('');
-            //      }  
-            //   }
+              let typingUsers  = [];
+              for (var i = 0; i < users.length; i++) {
+                 if(users[i]['typing'] === 'typing...') {
+                    typingUsers.push(users[i]['_id']);
+                 }
+              }
+             // console.log(typingUsers);
               let userlist = data;
               for (var i = 0; i < userlist.length; i++) {
                     if(keyArray.includes(userlist[i]['_id'])){
@@ -120,11 +124,14 @@ class ChatWindows extends React.Component {
                     } else {
                         userlist[i]['status'] = 'offline';
                     }
-                    // if(typingUsers.includes(userlist[i]['_id'])){
-                    //     userlist[i]['typing'] = 'typing...';
-                    // } else {
-                    //     userlist[i]['typing'] = '';
-                    // }
+                    if(typingUsers.includes(userlist[i]['_id'])){
+                        console.log(this.state.messageToDone);
+                        if(userlist[i]['_id']===this.state.messageToDone) {
+                            userlist[i]['typing'] = '';
+                        } else {
+                            userlist[i]['typing'] = 'typing...'; 
+                        }
+                    } 
                     const len = userlist[i]['message'].length;
                     if(len > 0) {
                         userlist[i]['time_calculate'] = userlist[i]['message'][len-1]['created_date'];
@@ -140,9 +147,9 @@ class ChatWindows extends React.Component {
                     }
                     userlist[i]['unread_count'] = unread_count;
                 } 
-              this.setState({userList : userlist})  
-              userlist.sort((a, b) => (a.time_calculate < b.time_calculate) ? 1 : -1)
-              this.setState({userList : userlist});
+                this.setState({userList : userlist})  
+                userlist.sort((a, b) => (a.time_calculate < b.time_calculate) ? 1 : -1)
+                this.setState({userList : userlist});
             })
             .catch((error) => {
                 console.log(error)
@@ -233,7 +240,7 @@ class ChatWindows extends React.Component {
             return (
                 <Container>
                     <Row>
-                        <Col md={4}> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList} emojiState = {this.state.active} 
+                        <Col md={4} className="userlist"> <Chat onChatClicked={this.onChatClicked.bind(this)} userList={this.state.userList} emojiState = {this.state.active} 
                         /> </Col>
     
                     {
