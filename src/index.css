@@ -46,9 +46,11 @@ code {
   margin-left: 60px;
 }
 .onlineStyle {
-  width: 9%;
-  margin-top: -4px;
-  padding: 6px;
+  width: 10%;
+  height: 2%;
+  margin-top: 18px;
+  padding: 8px;
+  padding-top: 2px;
 }
 .userInfoClass{
   padding: 7px;
@@ -65,8 +67,9 @@ code {
   background:#343a40 !important ;
 }
 .typingClass {
-  margin-left: 52px;
   color: green;
+  margin-left: 0px;
+  margin-top: -16px;
 }
 .userlist {
   overflow-y: scroll; 

@@ -27,12 +27,12 @@ handleSubmit = event => {
     let errors = this.state.errors;
     let data = this.state;
 
-    if(data.email==''){
+    if(data.email===''){
       errors.email = 'Email required!'
     } else {
       errors.email = ''
     }
-    if(data.password == ''){
+    if(data.password === ''){
       errors.password = 'Password required!'
     } else {
       errors.password = ''
@@ -44,7 +44,7 @@ handleSubmit = event => {
           email: this.state.email,
           password: this.state.password,
         }
-        axios.post('http://localhost:8080/api/auth', userObject)
+        axios.post(`${process.env.REACT_APP_URL}/api/auth`,userObject)
         .then((response) => {
           setUserSession(response.data.token, response.data.user);
             this.props.history.push('/chat-windows');

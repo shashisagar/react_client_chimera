@@ -19,7 +19,6 @@ class Dashboard extends React.Component {
         return (
           <div>
             Welcome {obj.firstName}!<br /><br />
-            <input type="button" onClick={this.handleLogout} value="Logout" />
           </div>
         );
     }

@@ -10,15 +10,9 @@ import '../index.css';
 
 import {
   MessageList,
-  Navbar as NavbarComponent,
 } from "react-chat-elements";
 
 class ChatBox extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     messageText: "",
     text : "",
@@ -27,7 +21,6 @@ class ChatBox extends React.Component {
 
   componentWillReceiveProps(){
     let active = this.props.emojiStateCheck;
-    console.log(active);
     this.setState({active});
   }
 
@@ -81,7 +74,7 @@ class ChatBox extends React.Component {
     return (
         <div>
                 <div className="userInfoClass">
-                  <Image style={{width: '6'+'%'}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle />
+                  <Image style={{width: '6%'}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle />
                   <span style={{padding: '20px'}}>{this.props.userinfo}</span>
                 </div>
             <div>

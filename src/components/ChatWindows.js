@@ -6,9 +6,7 @@ import EmptyChatWindows from './EmptyChatWindows';
 import {Container,Row,Col} from "react-bootstrap";
 import socketIOClient from "socket.io-client";
 import { getUser } from '../Utils/Common';
-const ENDPOINT = "http://localhost:8080";
-
-
+import Moment from 'moment';
 
 class ChatWindows extends React.Component {
     constructor(props) {
@@ -28,7 +26,7 @@ class ChatWindows extends React.Component {
     }
     
     initSocketConnection() {
-        this.socket = socketIOClient.connect(ENDPOINT);
+        this.socket = socketIOClient.connect(`${process.env.REACT_APP_URL}`);
     }
 
     setupSocketListeners() {
@@ -42,7 +40,7 @@ class ChatWindows extends React.Component {
         var obj = JSON.parse(user);
         const userlist = this.state.userList;
         for (var i = 0; i < userlist.length; i++) {          
-            if(e.text !='') {
+            if(e.text !=='') {
                 if(userlist[i]['_id'] === e.fromId) {
                     if((obj._id === e.toId)) {
                         userlist[i]['typing'] = 'typing...';
@@ -99,7 +97,7 @@ class ChatWindows extends React.Component {
         const user_id = obj._id;
         const config = {
             method: 'get',
-            url: 'http://127.0.0.1:8080/api/users/getUser/'+user_id,
+            url: `${process.env.REACT_APP_URL}/api/users/getUser/`+user_id,
             headers: { 'x-auth-token': sessionStorage.getItem('token') }
           }
           axios(config)
@@ -111,9 +109,9 @@ class ChatWindows extends React.Component {
               });
 
               let typingUsers  = [];
-              for (var i = 0; i < users.length; i++) {
-                 if(users[i]['typing'] === 'typing...') {
-                    typingUsers.push(users[i]['_id']);
+              for (var k = 0; k < users.length; k++) {
+                 if(users[k]['typing'] === 'typing...') {
+                    typingUsers.push(users[k]['_id']);
                  }
               }
              // console.log(typingUsers);
@@ -164,7 +162,7 @@ class ChatWindows extends React.Component {
               position: 'right',
               type: "text",
               text: text,
-              date: +new Date(),
+              dateString: Moment().format("DD-MM hh:mm"),
               className: "message"
             },
             to: this.state.to,
@@ -182,14 +180,13 @@ class ChatWindows extends React.Component {
         status = e.status;
         active = false;
         this.setState({to,status,active});
-        console.log(this.state.active);
         const user = getUser();
         var obj = JSON.parse(user);
         const user_id = obj._id;
         const userinfo = e.firstName +" "+e.lastName;
         const config = {
             method: 'get',
-            url: 'http://127.0.0.1:8080/api/users/getMessages/'+to+'/'+user_id,
+            url: `${process.env.REACT_APP_URL}/api/users/getMessages/`+to+'/'+user_id,
             headers: { 'x-auth-token': sessionStorage.getItem('token') }
         }
         axios(config)
@@ -200,7 +197,7 @@ class ChatWindows extends React.Component {
                 var chat = {};
                 chat['type'] = "text";
                 chat['text'] = data[i]['message'];
-                chat['date'] = +new Date(data[i]['created_date']);
+                chat['dateString'] = Moment(data[i]['created_date']).format("DD-MM hh:mm");
                 chat['className'] = "message";
                 if(user_id === data[i]['fromId']) {
                     chat['position'] = "right";

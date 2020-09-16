@@ -1,7 +1,6 @@
 import React from 'react';
 import {Form,Button} from 'react-bootstrap';
 import axios from 'axios';
-import {setUserSession } from '../Utils/Common';
 import {browserHistory} from 'react-router';
 
 class Register extends React.Component {
@@ -38,7 +37,7 @@ class Register extends React.Component {
       let data = this.state;
       let errors = this.state.errors;
 
-      if(data.firstName == ''){
+      if(data.firstName === ''){
         errors.firstName= 'First Name is required!'
       } else {
          if(data.firstName.length < 5 ){
@@ -48,7 +47,7 @@ class Register extends React.Component {
          }
       }
 
-      if(data.lastName == ''){
+      if(data.lastName === ''){
         errors.lastName = 'Last Name is required!'
       }
       else {
@@ -58,13 +57,13 @@ class Register extends React.Component {
           errors.lastName= ''
         }
      }
-      if(data.email == ''){
+      if(data.email === ''){
         errors.email= 'Email is required!'
       }  else {
           errors.email= ''
       }
 
-      if(data.password == ''){
+      if(data.password === ''){
         errors.password = 'Password is required!'
       }
       else {
@@ -75,7 +74,7 @@ class Register extends React.Component {
         }
      }
       
-      if(data.phone == ''){
+      if(data.phone === ''){
         errors.phone= 'Phone is required!'
       }
       else {
@@ -95,7 +94,7 @@ class Register extends React.Component {
             phone: this.state.phone,
             password: this.state.password,
           }
-          axios.post('http://127.0.0.1:8080/api/users', userObject)
+          axios.post(`${process.env.REACT_APP_URL}/api/users`, userObject)
           .then((response) => {
               this.setState({register_message : 'User registered successfully!!,please login '});
               this.setState({invalid_auth: ''});
@@ -105,7 +104,7 @@ class Register extends React.Component {
             let invalid_auth  = this.state.invalid_auth;
             invalid_auth = error.response.data; 
             this.setState({register_message: ''});
-            if(invalid_auth == 'User already registered.'){
+            if(invalid_auth === 'User already registered.'){
                this.setState({invalid_auth : invalid_auth});
             } else {
               this.setState({invalid_auth: ''});

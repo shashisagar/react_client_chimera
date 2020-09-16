@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container,Row,Col} from "react-bootstrap";
-import { getUser, removeUserSession } from '../Utils/Common';
+import { getUser } from '../Utils/Common';
 
 
 class EmptyChatWindows extends React.Component {

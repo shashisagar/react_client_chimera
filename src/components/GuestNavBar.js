@@ -9,11 +9,11 @@ class GuestNavBar extends React.Component {
         return (
             <div>
                 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                    <Navbar.Brand href="#home">Chat Application</Navbar.Brand>
+                    <Navbar.Brand>Chat Application</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto">
-                            <Nav.Link href="/login">Login</Nav.Link> 
+                            <Nav.Link href="/">Login</Nav.Link> 
                             <Nav.Link href="/register">Register</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
@@ -22,7 +22,7 @@ class GuestNavBar extends React.Component {
                     <div>
                         <div className="content">
                             <Switch>
-                                <Route path="/login" component={Login} />
+                                <Route exact path="/" component={Login} />
                                 <Route path="/register" component={Register} />
                             </Switch>
                         </div>
