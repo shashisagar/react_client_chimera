@@ -73,6 +73,7 @@ code {
 }
 .userlist {
   overflow-y: scroll; 
+  height: 593px;
 }
 .userInfoClass {
   position: sticky;
@@ -84,4 +85,18 @@ code {
 .searchText {
   position: sticky;
   top: -1px;
+}
+.messss{
+  height: 500px;
+  overflow-y: scroll;
+}
+.bcakforms {
+  background: #d0d0d030;min-height: 613px;padding: 5% 0%;
+}
+
+.login_register_page {
+  margin: 0px auto;
+  border: 1px solid #ccc6;
+  box-shadow: 0px 0px 5px #ccc;
+  background: #fff;padding: 4% 3%;
 }

@@ -70,14 +70,24 @@ class ChatBox extends React.Component {
     this.setState({ active: !currentState });
   };
 
+  componentDidUpdate(prevProps, prevState){
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    const {thing} = this.refs;
+    thing.scrollTop = thing.scrollHeight - thing.clientHeight;
+  }
+
   render() {
     return (
         <div>
-                <div className="userInfoClass">
+                <div className="userInfoClass ">
                   <Image style={{width: '6%'}} src="https://mdbootstrap.com/img/Photos/Avatars/avatar-1.jpg" roundedCircle />
                   <span style={{padding: '20px'}}>{this.props.userinfo}</span>
                 </div>
-            <div>
+            
+            <div className="messss" ref={`thing`}>
                 <MessageList
                   className='message-list'
                   lockable={true}
@@ -85,7 +95,7 @@ class ChatBox extends React.Component {
                   dataSource={this.props.greeting}
                 />          
             </div>
-            <div style={{marginTop:'430px', buttom:'0px'}} className="messageButton">
+            <div className="messageButton">
                 <FormGroup>
                     <InputGroup>
                       <FormControl type="text"

@@ -19,14 +19,23 @@ class GuestNavBar extends React.Component {
                     </Navbar.Collapse>
                 </Navbar>
                 <BrowserRouter>
-                    <div>
-                        <div className="content">
+                <div className="bcakforms">
+                <div className="container">
+                    <div className="row">
+                    
+                        <div className="content login_register_page">
+                        <div className="col-lg-12">
                             <Switch>
                                 <Route exact path="/" component={Login} />
                                 <Route path="/register" component={Register} />
                             </Switch>
                         </div>
+                        </div>
+                        </div>
                     </div>
+
+                </div>
+                    
                 </BrowserRouter>
             </div>
         );

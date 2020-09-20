@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form,Button} from 'react-bootstrap';
+import {Form,Button,Row,Col} from 'react-bootstrap';
 import axios from 'axios';
 import {browserHistory} from 'react-router';
 
@@ -98,8 +98,8 @@ class Register extends React.Component {
           .then((response) => {
               this.setState({register_message : 'User registered successfully!!,please login '});
               this.setState({invalid_auth: ''});
-              browserHistory.push('/login');
-              setTimeout(function(){ window.location.reload(false) }, 500);
+              // browserHistory.push('/login');
+              // setTimeout(function(){ window.location.reload(false) }, 500);
             }).catch((error) => {
             let invalid_auth  = this.state.invalid_auth;
             invalid_auth = error.response.data; 
@@ -116,51 +116,56 @@ class Register extends React.Component {
       }
   }
 
-  
   render() {
     return (
-      <div style={{margin: '209px',
-      marginTop: '20px'}}>
+      <div>
           <span className='error' style={{color: "red"}}>{this.state.register_message !=='' && this.state.register_message}</span>
           <span className='error' style={{color: "red"}}>{this.state.invalid_auth !=='' && this.state.invalid_auth}</span>
 
           <Form onSubmit={this.handleSubmit}>
-            <Form.Group controlId="formBasicFirstName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter First Name" name="firstName" onChange={this.handleChange} />
-              <span className='error' style={{color: "red"}}>{this.state.errors.firstName}</span>
-
-            </Form.Group>
-            <Form.Group controlId="formBasicLastName">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter Last Name" name="lastName" onChange={this.handleChange} />
-              <span className='error' style={{color: "red"}}>{this.state.errors.lastName}</span>
-
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange} />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-              <span className='error' style={{color: "red"}}>{this.state.errors.email}</span>
-
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
-              <span className='error' style={{color: "red"}}>{this.state.errors.password}</span>
-
-            </Form.Group>
-            <Form.Group controlId="formBasicPhone">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" placeholder="Enter phone Number" name="phone" onChange={this.handleChange} />
-              <span className='error' style={{color: "red"}}>{this.state.errors.phone}</span>
-
-            </Form.Group>
-            <Button style={{background: '#3e3434'}} type="submit">
-              Submit
-            </Button>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formBasicFirstName">          
+                  <Form.Control type="text" placeholder="Enter First Name" name="firstName" onChange={this.handleChange} />
+                  <span className='error' style={{color: "red"}}>{this.state.errors.firstName}</span>
+                  </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group controlId="formBasicLastName">
+                    <Form.Control type="text" placeholder="Enter Last Name" name="lastName" onChange={this.handleChange} />
+                    <span className='error' style={{color: "red"}}>{this.state.errors.lastName}</span>
+                    </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formBasicEmail">
+                  <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange} />
+                  <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                    </Form.Text>
+                    <span className='error' style={{color: "red"}}>{this.state.errors.email}</span>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="formBasicPassword">
+                  <Form.Control type="password" placeholder="Password" name="password" onChange={this.handleChange}/>
+                  <span className='error' style={{color: "red"}}>{this.state.errors.password}</span>
+                  </Form.Group>
+                </Col>
+              </Row>       
+              <Row>
+                <Col>
+                  <Form.Group controlId="formBasicPhone">     
+                    <Form.Control type="text" placeholder="Enter phone Number" name="phone" onChange={this.handleChange} />
+                      <span className='error' style={{color: "red"}}>{this.state.errors.phone}</span>
+                  </Form.Group>
+                </Col>
+              </Row>      
+          
+              <Button style={{background: '#3e3434'}} type="submit">
+                  Submit
+              </Button>
           </Form>
       </div>
     );

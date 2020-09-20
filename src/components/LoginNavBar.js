@@ -34,7 +34,7 @@ class LoginNavBar extends React.Component {
                 </Navbar>
                 <BrowserRouter>
                     <div>
-                        <div className="content">
+                        <div className="content login_register_page">
                             <Switch>
                                 <Route path="/dashboard" component={Dashboard} />
                                 <Route path="/chat-windows" component={ChatWindows} />
