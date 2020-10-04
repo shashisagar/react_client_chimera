@@ -26,7 +26,7 @@ class ChatWindows extends React.Component {
     }
     
     initSocketConnection() {
-        this.socket = socketIOClient.connect(`http://backendnodechimera.azurewebsites.net:8080`);
+        this.socket = socketIOClient.connect(`http://localhost:8080`);
     }
 
     setupSocketListeners() {
