@@ -26,7 +26,7 @@ class ChatWindows extends React.Component {
     }
     
     initSocketConnection() {
-        this.socket = socketIOClient.connect(`${process.env.REACT_APP_URL}`);
+        this.socket = socketIOClient.connect(`http://localhost:8080`);
     }
 
     setupSocketListeners() {
